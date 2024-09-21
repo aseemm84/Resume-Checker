@@ -36,7 +36,7 @@ Be critical and thorough in your assessment:
    - Extract required skills from the job description: {job_description}.
    - Extract required experience from the job description: {job_description}.
    - Extract required education from the job description: {job_description}.
-   - Meticulously compare skills, experience and education listed in the CV with those required in the job description: {job_description}.
+   - Meticulously compare skills (25%), experience (20%) and education (10%) listed in the CV with those required in the job description: {job_description}.
    - Identify any gaps or matches in skills and experiences, focusing on alignment with job requirements.
    - Deduct points for significant mismatches or omissions.
 
