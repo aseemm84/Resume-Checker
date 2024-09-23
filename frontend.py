@@ -31,10 +31,26 @@ def highlight_keywords(text, keywords):
         text = pattern.sub(f"**{keyword}**", text)
     return text
 
-def extract_keywords(text):
-    # Simple keyword extraction (you might want to improve this)
-    words = re.findall(r'\b\w+\b', text.lower())
-    return list(set(words))  # Remove duplicates
+def extract_matching_keywords(result):
+    try:
+        # Try to parse the entire result as JSON
+        result_dict = json.loads(result)
+        matching_keywords = result_dict.get("Matching Keywords", "")
+        return [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
+    except json.JSONDecodeError:
+        # If parsing fails, try to find and parse just the JSON part
+        json_match = re.search(r'\{.*\}', result, re.DOTALL)
+        if json_match:
+            try:
+                result_dict = json.loads(json_match.group())
+                matching_keywords = result_dict.get("Matching Keywords", "")
+                return [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
+            except json.JSONDecodeError:
+                pass
+        
+        # If all else fails, fall back to simple keyword extraction
+        words = re.findall(r'\b\w+\b', result.lower())
+        return list(set(words))  # Remove duplicates
 
 if st.button("Evaluate"):
     if uploaded_file is not None and job_description:
@@ -59,13 +75,7 @@ if st.button("Evaluate"):
                 st.subheader("Evaluation Result:")
                 st.write(filtered_result)
 
-                try:
-                    result_dict = json.loads(filtered_result)
-                    matching_keywords = result_dict.get("Matching Keywords", "")
-                    keywords = [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
-                except json.JSONDecodeError:
-                    st.warning("The AI response is not in the expected format. We'll try to extract keywords from the response.")
-                    keywords = extract_keywords(filtered_result)
+                keywords = extract_matching_keywords(filtered_result)
 
                 highlighted_cv = highlight_keywords(cv_content, keywords)
                 st.subheader("CV with Highlighted Keywords:")
