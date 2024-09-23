@@ -7,7 +7,6 @@ load_dotenv()
 
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
-# Define maximum scores for each category
 max_scores = {
     'Structure and Formatting': 20,
     'Content Quality': 10,
@@ -113,7 +112,7 @@ def score_cv(cv_content, job_description):
         
         return json.dumps(scores, indent=2)
     except json.JSONDecodeError:
-        return result
+        return result  # Return the original result if JSON parsing fails
 
 def filter_toxic_content(text):
     toxic_words = ["terrible", "awful", "horrible", "stupid", "idiot"]
