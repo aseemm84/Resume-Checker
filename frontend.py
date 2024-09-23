@@ -24,10 +24,17 @@ col2.title("CV Insight Pro: Your Path to Career Success")
 uploaded_file = st.file_uploader("Upload your CV (PDF format, max size: 1 MB)", type="pdf")
 job_description = st.text_area("Enter Job Role Description", height=200)
 
-def highlight_keywords(text, keywords):
-    for keyword in keywords:
-        text = text.replace(keyword, f"**{keyword}**")
-    return text
+def highlight_skills(cv_content, job_description):
+    # Extract keywords from the job description
+    job_keywords = set(job_description.lower().split())
+    
+    # Split the CV content into words to highlight matching skills
+    cv_words = cv_content.split()
+    
+    # Highlight the skills that are present in both CV and job description
+    highlighted_cv = ' '.join([f'**{word}**' if word.lower() in job_keywords else word for word in cv_words])
+    
+    return highlighted_cv
 
 # Evaluate button
 if st.button("Evaluate"):
@@ -55,9 +62,10 @@ if st.button("Evaluate"):
                 st.subheader("Evaluation Result:")
                 st.write(filtered_result)
 
+               
                 # Extract and highlight keywords
                 keywords = [word.strip() for word in filtered_result.split("Matching Keywords")[-1].split(",")]
-                highlighted_cv = highlight_keywords(cv_content, keywords)
+                highlighted_cv = highlight_skills(cv_content, job_description)
                 st.subheader("CV with Highlighted Keywords:")
                 st.markdown(highlighted_cv)
 
