@@ -6,13 +6,14 @@ from transformers import pipeline
 import time
 import base64
 
+# Set page config as the first Streamlit command
+st.set_page_config(page_title="CV Evaluator", page_icon="📄")
+
 @st.cache_resource
 def load_toxicity_detector():
     return pipeline("text-classification", model="unitary/toxic-bert")
 
 toxicity_detector = load_toxicity_detector()
-
-st.set_page_config(page_title="CV Evaluator", page_icon="📄")
 
 col1, col2 = st.columns([1, 4])
 
