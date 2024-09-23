@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 import cohere
+import json
 
 load_dotenv()
 
@@ -100,29 +101,21 @@ def score_cv(cv_content, job_description):
     prompt = construct_prompt(cv_content, job_description)
     result = call_cohere_api(prompt)
     
-    # Parse the JSON response
-    import json
     try:
         scores = json.loads(result)
-        # Validate and adjust scores
         adjusted_scores = validate_and_adjust_scores({k: v for k, v in scores.items() if k in max_scores})
         
-        # Recalculate total score
         total_score = sum(adjusted_scores.values())
         
-        # Update the scores and total in the result
         for category, score in adjusted_scores.items():
             scores[category] = score
         scores['Total Score'] = total_score
         
-        # Convert back to string for return
         return json.dumps(scores, indent=2)
     except json.JSONDecodeError:
-        return result  # Return the original result if JSON parsing fails
+        return result
 
 def filter_toxic_content(text):
-    # This is a placeholder function. In a real-world scenario, you'd implement
-    # more sophisticated content filtering or rephrasing logic.
     toxic_words = ["terrible", "awful", "horrible", "stupid", "idiot"]
     for word in toxic_words:
         text = text.replace(word, "[inappropriate word]")
