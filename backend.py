@@ -52,14 +52,19 @@ Be critical and thorough in your assessment:
    - Extract required skills from the job description: {job_description}.
    - Extract required experience from the job description: {job_description}.
    - Extract required education from the job description: {job_description}.
-   - Meticulously compare skills (25%), experience (20%) and education (10%) listed in the CV with those required in the job description: {job_description}.
+   - Meticulously compare Matching Skills (10%), skills (15%), experience (20%) and education (10%) listed in the CV with those required in the job description: {job_description}.
    - Identify any gaps or matches in skills and experiences, focusing on alignment with job requirements.
    - Deduct points for significant mismatches or omissions.
 
-5. **Suggestions for Improvement:**
+5. **Provide a list of Matching Skills between the {cv_content} and {job_description}:**
+   - Extract the skills from {cv_content} and required skills from the {job_description}
+   - Provide a numbered list of skills that are matching between {cv_content} and {job_description}
+
+6. **Suggestions for Improvement:**
    - Provide detailed and actionable feedback on enhancing CV effectiveness and ATS-friendliness.
    - Suggest incorporating more industry-specific keywords or rephrasing certain sections for clarity.
    - Recommend changes to improve overall presentation, such as reorganizing sections or adjusting formatting.
+
 
 Based on these criteria, provide a detailed score out of 100 and comprehensive suggestions for improvement.
 The evaluated total score should be sumation of scores calculated for 1, 2, 3 and 4 steps.
