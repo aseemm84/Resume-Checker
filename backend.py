@@ -81,7 +81,7 @@ Present the scores in a JSON format like this:
     "Match with Job Role": [score],
     "Total Score": [total score],
     "Suggestions": "[detailed suggestions]",
-    "Matching Keywords": "[list of matching keywords between {cv_content} and {job_description}]"
+    "Matching Keywords": "[list of matching skills between {cv_content} and {job_description}]"
 }}
 """
 
