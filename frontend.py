@@ -56,7 +56,7 @@ if st.button("Evaluate"):
                 st.write(filtered_result)
 
                 # Extract and highlight keywords
-                keywords = [word.strip() for word in filtered_result.split("Keywords from the CV that match the job description:")[-1].split(",")]
+                keywords = [word.strip() for word in filtered_result.split("Matching Keywords")[-1].split(",")]
                 highlighted_cv = highlight_keywords(cv_content, keywords)
                 st.subheader("CV with Highlighted Keywords:")
                 st.markdown(highlighted_cv)
