@@ -6,9 +6,8 @@ load_dotenv()
 
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
-def score_cv(cv_content, job_description):
-    # Define a prompt to evaluate the CV based on best practices and job role
-    prompt = f"""
+def construct_prompt(cv_content, job_description):
+    return f"""
 You are an expert CV evaluation assistant.
 Your task is to rigorously evaluate the provided CV content {cv_content} based on best practices for creating an effective and ATS-friendly resume.
 Apply a strict grading standard, similar to tough marking in an exam.
@@ -48,15 +47,29 @@ Be critical and thorough in your assessment:
 Based on these criteria, provide a detailed score out of 100 and comprehensive suggestions for improvement.
 The evaluated total score should be sumation of scores calculated for 1, 2, 3 and 4 steps.
 Ensure consistency in scoring by strictly following these guidelines.
+
+Additionally, provide a list of keywords from the CV that match the job description.
 """
 
+def call_cohere_api(prompt):
     try:
         response = co.chat(
             model="command-r-plus",
             message=prompt,
             temperature=0
         )
-        
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
+
+def score_cv(cv_content, job_description):
+    prompt = construct_prompt(cv_content, job_description)
+    return call_cohere_api(prompt)
+
+def filter_toxic_content(text):
+    # This is a placeholder function. In a real-world scenario, you'd implement
+    # more sophisticated content filtering or rephrasing logic.
+    toxic_words = ["terrible", "awful", "horrible", "stupid", "idiot"]
+    for word in toxic_words:
+        text = text.replace(word, "[inappropriate word]")
+    return text
