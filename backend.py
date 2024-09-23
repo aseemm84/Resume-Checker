@@ -6,6 +6,23 @@ load_dotenv()
 
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
+# Define maximum scores for each category
+max_scores = {
+    'Structure and Formatting': 20,
+    'Content Quality': 10,
+    'ATS Compatibility': 15,
+    'Match with Job Role': 55
+}
+
+def validate_and_adjust_scores(category_scores):
+    adjusted_scores = {}
+    for category, score in category_scores.items():
+        if score > max_scores[category]:
+            adjusted_scores[category] = max_scores[category]
+        else:
+            adjusted_scores[category] = score
+    return adjusted_scores
+
 def construct_prompt(cv_content, job_description):
     return f"""
 You are an expert CV evaluation assistant.
@@ -49,6 +66,23 @@ The evaluated total score should be sumation of scores calculated for 1, 2, 3 an
 Ensure consistency in scoring by strictly following these guidelines.
 
 Additionally, provide a list of keywords from the CV that match the job description.
+
+Important: Ensure that the score for each category does not exceed its maximum allowed value:
+Structure and Formatting: 20
+Content Quality: 10
+ATS Compatibility: 15
+Match with Job Role: 55
+
+Present the scores in a JSON format like this:
+{{
+    "Structure and Formatting": [score],
+    "Content Quality": [score],
+    "ATS Compatibility": [score],
+    "Match with Job Role": [score],
+    "Total Score": [total score],
+    "Suggestions": "[detailed suggestions]",
+    "Matching Keywords": "[list of matching keywords]"
+}}
 """
 
 def call_cohere_api(prompt):
@@ -64,7 +98,27 @@ def call_cohere_api(prompt):
 
 def score_cv(cv_content, job_description):
     prompt = construct_prompt(cv_content, job_description)
-    return call_cohere_api(prompt)
+    result = call_cohere_api(prompt)
+    
+    # Parse the JSON response
+    import json
+    try:
+        scores = json.loads(result)
+        # Validate and adjust scores
+        adjusted_scores = validate_and_adjust_scores({k: v for k, v in scores.items() if k in max_scores})
+        
+        # Recalculate total score
+        total_score = sum(adjusted_scores.values())
+        
+        # Update the scores and total in the result
+        for category, score in adjusted_scores.items():
+            scores[category] = score
+        scores['Total Score'] = total_score
+        
+        # Convert back to string for return
+        return json.dumps(scores, indent=2)
+    except json.JSONDecodeError:
+        return result  # Return the original result if JSON parsing fails
 
 def filter_toxic_content(text):
     # This is a placeholder function. In a real-world scenario, you'd implement
