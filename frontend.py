@@ -5,9 +5,8 @@ from PIL import Image
 from transformers import pipeline
 import time
 import base64
-import json
-import re
 
+# Set page config as the first Streamlit command
 st.set_page_config(page_title="CV Evaluator", page_icon="📄")
 
 @st.cache_resource
@@ -19,7 +18,7 @@ toxicity_detector = load_toxicity_detector()
 col1, col2 = st.columns([1, 4])
 
 logo = Image.open("static/logo.png")
-col1.image(logo, width=100)
+col1.image(logo, width=100)  # Adjust width as needed
 col2.title("CV Insight Pro: Your Path to Career Success")
 
 uploaded_file = st.file_uploader("Upload your CV (PDF format, max size: 1 MB)", type="pdf")
@@ -27,36 +26,16 @@ job_description = st.text_area("Enter Job Role Description", height=200)
 
 def highlight_keywords(text, keywords):
     for keyword in keywords:
-        pattern = re.compile(re.escape(keyword), re.IGNORECASE)
-        text = pattern.sub(f"**{keyword}**", text)
+        text = text.replace(keyword, f"**{keyword}**")
     return text
 
-def extract_matching_keywords(result):
-    try:
-        # Try to parse the entire result as JSON
-        result_dict = json.loads(result)
-        matching_keywords = result_dict.get("Matching Keywords", "")
-        return [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
-    except json.JSONDecodeError:
-        # If parsing fails, try to find and parse just the JSON part
-        json_match = re.search(r'\{.*\}', result, re.DOTALL)
-        if json_match:
-            try:
-                result_dict = json.loads(json_match.group())
-                matching_keywords = result_dict.get("Matching Keywords", "")
-                return [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
-            except json.JSONDecodeError:
-                pass
-        
-        # If all else fails, fall back to simple keyword extraction
-        words = re.findall(r'\b\w+\b', result.lower())
-        return list(set(words))  # Remove duplicates
-
+# Evaluate button
 if st.button("Evaluate"):
     if uploaded_file is not None and job_description:
         if uploaded_file.size > 1 * 1024 * 1024:
             st.error("File size exceeds 1 MB limit.")
         else:
+            # Read PDF content
             pdf_reader = PyPDF2.PdfReader(uploaded_file)
             cv_content = ""
             for page in pdf_reader.pages:
@@ -66,25 +45,28 @@ if st.button("Evaluate"):
                 with st.spinner("Evaluating your CV..."):
                     progress_bar = st.progress(0)
                     for i in range(100):
-                        time.sleep(0.05)
+                        time.sleep(0.05)  # Simulate processing time
                         progress_bar.progress(i + 1)
                     result = score_cv(cv_content, job_description)
                 
+                # Filter toxic content
                 filtered_result = filter_toxic_content(result)
                 
                 st.subheader("Evaluation Result:")
                 st.write(filtered_result)
 
-                keywords = extract_matching_keywords(filtered_result)
-
+                # Extract and highlight keywords
+                keywords = [word.strip() for word in filtered_result.split("Matching Keywords")[-1].split(",")]
                 highlighted_cv = highlight_keywords(cv_content, keywords)
                 st.subheader("CV with Highlighted Keywords:")
                 st.markdown(highlighted_cv)
 
+                # Download button for evaluation result
                 b64 = base64.b64encode(filtered_result.encode()).decode()
                 href = f'<a href="data:file/txt;base64,{b64}" download="evaluation_result.txt">Download Evaluation Result</a>'
                 st.markdown(href, unsafe_allow_html=True)
 
+                # Evaluate toxicity of the result
                 toxicity_chunks = [filtered_result[i:i+512] for i in range(0, len(filtered_result), 512)]
                 toxicity_scores = [toxicity_detector(chunk)[0]['score'] for chunk in toxicity_chunks]
                 avg_toxicity = sum(toxicity_scores) / len(toxicity_scores)
