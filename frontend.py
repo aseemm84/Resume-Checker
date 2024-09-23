@@ -54,27 +54,31 @@ if st.button("Evaluate"):
                 st.subheader("Evaluation Result:")
                 st.write(filtered_result)
 
-                # Parse the JSON result
-                result_dict = json.loads(filtered_result)
-                matching_keywords = result_dict.get("Matching Keywords", "")
-                keywords = [word.strip() for word in matching_keywords.strip("[]").split(",")]
+                try:
+                    result_dict = json.loads(filtered_result)
+                    matching_keywords = result_dict.get("Matching Keywords", "")
+                    keywords = [word.strip() for word in matching_keywords.strip("[]").split(",") if word.strip()]
 
-                highlighted_cv = highlight_keywords(cv_content, keywords)
-                st.subheader("CV with Highlighted Keywords:")
-                st.markdown(highlighted_cv)
+                    highlighted_cv = highlight_keywords(cv_content, keywords)
+                    st.subheader("CV with Highlighted Keywords:")
+                    st.markdown(highlighted_cv)
 
-                b64 = base64.b64encode(filtered_result.encode()).decode()
-                href = f'<a href="data:file/txt;base64,{b64}" download="evaluation_result.txt">Download Evaluation Result</a>'
-                st.markdown(href, unsafe_allow_html=True)
+                    b64 = base64.b64encode(filtered_result.encode()).decode()
+                    href = f'<a href="data:file/txt;base64,{b64}" download="evaluation_result.txt">Download Evaluation Result</a>'
+                    st.markdown(href, unsafe_allow_html=True)
 
-                toxicity_chunks = [filtered_result[i:i+512] for i in range(0, len(filtered_result), 512)]
-                toxicity_scores = [toxicity_detector(chunk)[0]['score'] for chunk in toxicity_chunks]
-                avg_toxicity = sum(toxicity_scores) / len(toxicity_scores)
-                
-                st.subheader("Toxicity Analysis in generated content above:")
-                st.write(f"Toxicity Score: {avg_toxicity:.2f}")
-                if avg_toxicity > 0.5:
-                    st.warning("The evaluation may contain some inappropriate content. It has been filtered for professionalism.")
+                    toxicity_chunks = [filtered_result[i:i+512] for i in range(0, len(filtered_result), 512)]
+                    toxicity_scores = [toxicity_detector(chunk)[0]['score'] for chunk in toxicity_chunks]
+                    avg_toxicity = sum(toxicity_scores) / len(toxicity_scores)
+                    
+                    st.subheader("Toxicity Analysis in generated content above:")
+                    st.write(f"Toxicity Score: {avg_toxicity:.2f}")
+                    if avg_toxicity > 0.5:
+                        st.warning("The evaluation may contain some inappropriate content. It has been filtered for professionalism.")
+                except json.JSONDecodeError:
+                    st.error("Error parsing the evaluation result. The AI response may not be in the expected format.")
+                    st.write("Raw response:")
+                    st.write(filtered_result)
             else:
                 st.error("Could not extract text from the PDF.")
     else:
