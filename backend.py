@@ -8,10 +8,10 @@ co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
 # Define maximum scores for each category
 max_scores = {
-    'Structure and Formatting': 20,
+    'Structure and Formatting': 10,
     'Content Quality': 10,
-    'ATS Compatibility': 15,
-    'Match with Job Role': 55
+    'ATS Compatibility': 10,
+    'Match with Job Role': 70
 }
 
 def validate_and_adjust_scores(category_scores):
@@ -32,7 +32,7 @@ Apply a strict grading standard, similar to tough marking in an exam.
 Consider these steps, each contributing to the overall score based on specified weightage.
 Be critical and thorough in your assessment:
 
-1. **Structure and Formatting (20% weightage in total score):**
+1. **Structure and Formatting (10% weightage in total score):**
    - Critically examine the format for clarity and consistency.
    - Ensure all section headings such as "Education," "Experience," and "Skills" are prominently and correctly used.
    - Strictly check for standard font usage, appropriate margins, and effective bullet points.
@@ -43,16 +43,16 @@ Be critical and thorough in your assessment:
    - Assess the use of strong action verbs at the beginning of each bullet point to emphasize achievements and skills.
    - Deduct points for lack of quantifiable accomplishments.
 
-3. **ATS Compatibility (15% weightage in total score):**
+3. **ATS Compatibility (10% weightage in total score):**
    - Ensure strict avoidance of complex formatting like tables or graphics that can confuse ATS software.
    - Confirm inclusion of keywords relevant to the job description naturally throughout the CV.
    - Penalize any missing critical keywords.
 
-4. **Match with Job Role (55% weightage in total score):**
+4. **Match with Job Role (70% weightage in total score):**
    - Extract required skills from the job description: {job_description}.
    - Extract required experience from the job description: {job_description}.
    - Extract required education from the job description: {job_description}.
-   - Meticulously compare Matching Skills (10%), skills (15%), experience (20%) and education (10%) listed in the CV with those required in the job description: {job_description}.
+   - Meticulously compare Matching Skills (15%), skills (15%), experience (30%) and education (10%) listed in the CV with those required in the job description: {job_description}.
    - Identify any gaps or matches in skills and experiences, focusing on alignment with job requirements.
    - Deduct points for significant mismatches or omissions.
 
@@ -73,10 +73,10 @@ Ensure consistency in scoring by strictly following these guidelines.
 Additionally, provide a list of keywords from the CV that match the job description.
 
 Important: Ensure that the score for each category does not exceed its maximum allowed value:
-Structure and Formatting: 20
+Structure and Formatting: 10
 Content Quality: 10
-ATS Compatibility: 15
-Match with Job Role: 55
+ATS Compatibility: 10
+Match with Job Role: 70
 
 Present the scores in a JSON format like this:
 {{
@@ -88,6 +88,8 @@ Present the scores in a JSON format like this:
     "Suggestions": "[detailed suggestions]",
     "Matching Keywords": "[list of matching skills between {cv_content} and {job_description}]"
 }}
+
+Also draft a new CV based on suggestions with skills (highlighted as **) that are required in {job_description}.
 """
 
 def call_cohere_api(prompt):
