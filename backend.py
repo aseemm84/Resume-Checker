@@ -89,7 +89,7 @@ Present the scores in a JSON format like this:
     "Matching Keywords": "[list of matching skills between {cv_content} and {job_description}]"
 }}
 
-Also draft a new CV based on suggestions with skills (highlighted as **) that are required in {job_description}.
+Provide detailed analysis of the above 6 points. Also draft a new CV based on suggestions with skills (highlighted as **) that are required in {job_description}.
 """
 
 def call_cohere_api(prompt):
