@@ -1,10 +1,10 @@
 import streamlit as st
 import PyPDF2
-from backend import CVstruct_prompt, actVerb_prompt, CVcontent_prompt, ATS_prompt, jobRole_prompt, draft_new, overall_score
+from backend import CVstruct_prompt, actVerb_prompt, CVcontent_prompt, ATS_prompt, jobRole_prompt, draft_new
 from PIL import Image
-from transformers import pipeline
 import time
-import base64
+import re
+import pandas as pd
 
 # Set page config as the first Streamlit command
 st.set_page_config(page_title="CV Evaluator", page_icon="📄")
@@ -44,10 +44,32 @@ if st.button("Evaluate"):
                     result_ats = ATS_prompt(cv_content, job_description)
                     result_role = jobRole_prompt(cv_content, job_description)
                     new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
-                    score = overall_score(result_struct, result_verb, result_content, result_ats, result_role)
+                    
+                def extract_score(result_text):
+                    match = re.search(r"Score: (\d+)", result_text)
+                    if match:
+                        return int(match.group(1))
+                    else:
+                        return 0
+
+                struct_score = extract_score(result_struct)
+                verb_score = extract_score(result_verb)
+                content_score = extract_score(result_content)
+                ats_score = extract_score(result_ats)
+                role_score = extract_score(result_role)
+                # Data for the chart
+                labels = ['Structure & Formatting', 'Action Verbs', 'Content Quality', 'ATS Compatibility', 'Job Role Match']
+                scores = [struct_score, verb_score, content_score, ats_score, role_score]
+                weightage = [0.1, 0.1, 0.1, 0.1, 0.6]
+                data = pd.DataFrame({'Labels': labels, 'Scores': scores, 'Weightage': weightage})
+                st.bar_chart(data, x = 'Labels', y = 'Scores')
+                # st.text(labels) # Display labels below the chart
+                st.title('CV Evaluation Scores')
+                st.subheader("Overal Score")
+                score = round((data['Scores'] * data['Weightage']).sum(),2)
+                st.write(score)
 
                 
-                # Filter toxic content
                 
                 st.subheader("Evaluation Result:")
                 st.subheader("1. Structure and Formatting")
@@ -60,10 +82,15 @@ if st.button("Evaluate"):
                 st.write(result_ats)
                 st.subheader("5. Job Role Match")
                 st.write(result_role)
-                st.subheader("Overal Score")
-                st.write(score)
+                
+
+                
+
+                
                 st.subheader("6. New Draft CV Based on Above Suggestions:")
                 st.write(new_cv)
+
+
 
                 
 
