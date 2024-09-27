@@ -46,9 +46,9 @@ if st.button("Evaluate"):
                     new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
                     
                 def extract_score(result_text):
-                    match = re.search(r"Score: (\d+)", result_text)
+                    match = re.findall(r"Score: (\d+)", result_text)
                     if match:
-                        return int(match.group(1))
+                        return int(match[-1])
                     else:
                         return 0
 
