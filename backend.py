@@ -195,39 +195,3 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
     except Exception as e:
         return f"Error: {str(e)}"
     
-
-def overall_score(suggest1, suggest2, suggest3, suggest4, suggest5):
-    prompt = f"""
-                Extract final scores (provided under Score heading) from the following suggestions:
-                1. CV Structure and Formatting Score: Extract from {suggest1}
-                2. Action Verb Usage in CV Score: Extract from {suggest2}
-                3. CV Content Quality Score: Extract from {suggest3}
-                4. CV ATS Compatibility Score: Extract from {suggest4}
-                5. CV Job Role Description Match Score: Extract from {suggest5}
-    
-                Calculate average score based on above extractions with following weightages:
-                1. CV Structure and Formatting Score Weightage: 10%
-                2. Action Verb Usage in CV Score Weightage: 10%
-                3. CV Content Quality Score Weightage: 10%
-                4. CV ATS Compatibility Score Weightage: 10%
-                5. CV Job Role Description Match Score Weightage: 60%
-
-                The formula for calculating the final score is:
-                Final Score = 
-                0.1 * (Structure and Formatting Score) + 0.1 * (Action Verb Usage Score) + 0.1 * (Content Quality Score) + 0.1 * (ATS Compatibility Score) + 0.6 * (Job Role Description Match Score)
-
-                The result should only be final score in numerical format without any explaination.
-        """
-
-    try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            max_tokens= 2,
-            temperature=0
-        )
-        return response.text
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-
