@@ -6,131 +6,228 @@ load_dotenv()
 
 co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
-# Define maximum scores for each category
-max_scores = {
-    'Structure and Formatting': 10,
-    'Content Quality': 10,
-    'ATS Compatibility': 10,
-    'Match with Job Role': 70
-}
 
-def validate_and_adjust_scores(category_scores):
-    adjusted_scores = {}
-    for category, score in category_scores.items():
-        if score > max_scores[category]:
-            adjusted_scores[category] = max_scores[category]
-        else:
-            adjusted_scores[category] = score
-    return adjusted_scores
+def CVstruct_prompt(cv_content):
+    prompt = f"""
+                You are an expert CV evaluation assistant.
+                Your task is to rigorously evaluate the provided CV content {cv_content} for the CV Structure and Formatting Best Practices.
+                Focus on consistency in font style, section headers, use of bullet points, margins, and alignment.
+                Assess whether the layout is clean and easy to read, including the proper usage of reverse chronological order for experiences.
+                Provide suggestions for improvements if any formatting inconsistencies or readability issues are found.
+                Following are some examples of structure and formatting best practices:
+                1. Ensure uniformity in font style, bullet points, and section headers. Use bold and italics sparingly for emphasis.
+                2. Recommended fonts include Times New Roman, Arial, Helvetica, or Calibri in 10-12 point size, with 0.5-1 inch margins.
+                3. Include standard sections like Education, Experience, Skills, and Contact Information.
+                Optional sections like Leadership and Technical Skills can be included based on relevannce.
+                4. Use concise bullet points starting with action verbs to highlight achievements.
+                Keep the format consistent across all entries.
+                5. List experiences in reverse chronological order, starting with the most recent position.
+                
+                Apply a strict grading standard, similar to tough marking in an exam.
 
-def construct_prompt(cv_content, job_description):
-    return f"""
-You are an expert CV evaluation assistant.
-Your task is to rigorously evaluate the provided CV content {cv_content} based on best practices for creating an effective and ATS-friendly resume.
-Apply a strict grading standard, similar to tough marking in an exam.
-
-Consider these steps, each contributing to the overall score based on specified weightage.
-Be critical and thorough in your assessment:
-
-1. **Structure and Formatting (10% weightage in total score):**
-   - Critically examine the format for clarity and consistency.
-   - Ensure all section headings such as "Education," "Experience," and "Skills" are prominently and correctly used.
-   - Strictly check for standard font usage, appropriate margins, and effective bullet points.
-   - Penalize any deviation from these norms.
-
-2. **Content Quality (10% weightage in total score):**
-   - Rigorously evaluate if all necessary sections are included, such as contact information, education, work experience, and skills.
-   - Assess the use of strong action verbs at the beginning of each bullet point to emphasize achievements and skills.
-   - Deduct points for lack of quantifiable accomplishments.
-
-3. **ATS Compatibility (10% weightage in total score):**
-   - Ensure strict avoidance of complex formatting like tables or graphics that can confuse ATS software.
-   - Confirm inclusion of keywords relevant to the job description naturally throughout the CV.
-   - Penalize any missing critical keywords.
-
-4. **Match with Job Role (70% weightage in total score):**
-   - Extract required skills from the job description: {job_description}.
-   - Extract required experience from the job description: {job_description}.
-   - Extract required education from the job description: {job_description}.
-   - Meticulously compare Matching Skills (15%), skills (15%), experience (30%) and education (10%) listed in the CV with those required in the job description: {job_description}.
-   - Identify any gaps or matches in skills and experiences, focusing on alignment with job requirements.
-   - Deduct points for significant mismatches or omissions.
-
-5. **Provide a list of Matching Skills between the {cv_content} and {job_description}:**
-   - Extract the skills from {cv_content} and required skills from the {job_description}
-   - Provide a numbered list of skills that are matching between {cv_content} and {job_description}
-
-6. **Suggestions for Improvement:**
-   - Provide detailed and actionable feedback on enhancing CV effectiveness and ATS-friendliness.
-   - Suggest incorporating more industry-specific keywords or rephrasing certain sections for clarity.
-   - Recommend changes to improve overall presentation, such as reorganizing sections or adjusting formatting.
-
-
-Based on these criteria, provide a detailed score out of 100 and comprehensive suggestions for improvement.
-The evaluated total score should be sumation of scores calculated for 1, 2, 3 and 4 steps.
-Ensure consistency in scoring by strictly following these guidelines.
-
-Additionally, provide a list of keywords from the CV that match the job description.
-
-Important: Ensure that the score for each category does not exceed its maximum allowed value:
-Structure and Formatting: 10
-Content Quality: 10
-ATS Compatibility: 10
-Match with Job Role: 70
-
-Present the scores in a JSON format like this:
-{{
-    "Structure and Formatting": [score],
-    "Content Quality": [score],
-    "ATS Compatibility": [score],
-    "Match with Job Role": [score],
-    "Total Score": [total score],
-    "Suggestions": "[detailed suggestions]",
-    "Matching Keywords": "[list of matching skills between {cv_content} and {job_description}]"
-}}
-
-Provide detailed analysis of the above 6 points. Also draft a new CV based on suggestions with skills (highlighted as **) that are required in {job_description}.
-"""
-
-def call_cohere_api(prompt):
+                The result should be following format:
+                1. Overall Structure an Formatting: Numbered list with detailed analysis
+                2. Section-by-section analysis: Numbered list with detailed analysis
+                3. Suggestions for Improvement: Numbered list with detailed suggestions
+                4. Score: A score out of 100
+                """
+    
     try:
         response = co.chat(
             model="command-r-plus",
-            message=prompt,
+            message= prompt,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
+def actVerb_prompt(cv_content, job_description):
+    prompt = f"""
+                You are an expert CV evaluation assistant.
+                Your task is to rigorously evaluate the provided CV content {cv_content} for Action Verbs Usage best practices.
+                Analyze the usage of action verbs throughout the CV.
+                Ensure that each bullet point begins with a strong, dynamic action verb that effectively conveys the candidate's skills and achievements.
+                Check if the action verbs vary and are tailored to highlight leadership, technical, or communication skills.
+                Suggest improvements if any passive language or repetitive verbs are detected.
+                Following are some examples of action verb usage best practices:
+                1. Use varied and impactful action verbs to begin each bullet point, showcasing specific actions taken (e.g., developed, managed, coordinated).
+                2. Replace generic phrases like “responsible for” or “duties include” with dynamic action verbs.
+                3. Align choice of verbs with the industry or job role {job_description} for which the CV {cv_content} will be used to apply (e.g., "engineered" for technical roles, "negotiated" for management).
+                4. Diversify your verb usage to cover different skills such as leadership, communication, problem-solving, and technical expertise.
+                
+                Apply a strict grading standard, similar to tough marking in an exam.
+
+                The result should be following format:
+                1. Overall Action Verb Usage: Numbered list with detailed analysis
+                2. Section-by-section analysis: Numbered list with detailed analysis
+                3. Suggestions for Improvement: Numbered list with detailed suggestions
+                4. Score: A score out of 100
+                """
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
             temperature=0
         )
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
-def score_cv(cv_content, job_description):
-    prompt = construct_prompt(cv_content, job_description)
-    result = call_cohere_api(prompt)
-    
-    # Parse the JSON response
-    import json
-    try:
-        scores = json.loads(result)
-        # Validate and adjust scores
-        adjusted_scores = validate_and_adjust_scores({k: v for k, v in scores.items() if k in max_scores})
-        
-        # Recalculate total score
-        total_score = sum(adjusted_scores.values())
-        
-        # Update the scores and total in the result
-        for category, score in adjusted_scores.items():
-            scores[category] = score
-        scores['Total Score'] = total_score
-        
-        # Convert back to string for return
-        return json.dumps(scores, indent=2)
-    except json.JSONDecodeError:
-        return result  # Return the original result if JSON parsing fails
+def CVcontent_prompt(cv_content, job_description):
+    prompt = f"""
+                You are an expert CV evaluation assistant.
+                Your task is to rigorously evaluate the provided CV content {cv_content} for CV content quality best practices.
+                Examine the quality of the CV content, focusing on how effectively the candidate highlights accomplishments rather than listing job responsibilities.
+                Check for the use of quantifiable results where applicable, relevance of listed experiences, and the inclusion of industry-specific keywords.
+                Ensure the content is concise and avoids unnecessary personal details or pronouns.
+                Recommend ways to enhance the focus on achievements and relevance.
+                Following are some examples of CV Content Quality best practices:
+                1. Where possible, use numbers to describe the scale or impact of your accomplishments (e.g., increased sales by 20%).
+                2. Highlight specific outcomes and contributions rather than listing job responsibilities.
+                3. Incorporate industry-specific terms and keywords from the job description {job_description} to improve relevance.
+                4. Write in the third person without using "I," "me," or "my".
+                5. Keep content brief and to the point, focusing only on the most relevant experiences for the position.
 
-def filter_toxic_content(text):
-    # This is a placeholder function. In a real-world scenario, you'd implement
-    # more sophisticated content filtering or rephrasing logic.
-    toxic_words = ["terrible", "awful", "horrible", "stupid", "idiot"]
-    for word in toxic_words:
-        text = text.replace(word, "[inappropriate word]")
-    return text
+                Apply a strict grading standard, similar to tough marking in an exam.
+
+                The result should be following format:
+                1. Overall CV Content Quality Analysis: Numbered list with detailed analysis
+                2. Section-by-section analysis: Numbered list with detailed analysis
+                3. Suggestions for Improvement: Numbered list with detailed suggestions
+                4. Score: A score out of 100
+            """
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def ATS_prompt(cv_content, job_description):
+    prompt = f"""
+                You are an expert CV evaluation assistant.
+                Your task is to rigorously evaluate the provided CV content {cv_content} for ATS compatibility best practices.
+                Assess the CV's compatibility with Applicant Tracking Systems (ATS).
+                Ensure that it uses simple formatting without complex tables, columns, or images.
+                Verify that appropriate keywords from the job description {job_description} or industry standards are incorporated, and that the file is likely to be parsed correctly by ATS.
+                Suggest any necessary changes to improve ATS readability, such as modifying section headings or avoiding special characters.
+                Following are some examples of ATS compatibility best practices:
+                1. Avoid unusual fonts, images, or special characters that could confuse Applicant Tracking Systems (ATS).
+                2. Tailor the CV by incorporating keywords and phrases from the job description to ensure it ranks higher in ATS.
+                3. Use simple formats, avoiding text boxes, columns, and tables, which might not be readable by ATS.
+                4. Stick to conventional headings like “Work Experience” and “Education” to ensure ATS systems can easily parse your resume.
+
+                Apply a strict grading standard, similar to tough marking in an exam.
+
+                The result should be following format:
+                1. Overall ATS Compatibility Analysis: Numbered list with detailed analysis
+                2. Section-by-section analysis: Numbered list with detailed analysis
+                3. Suggestions for Improvement: Numbered list with detailed suggestions
+                4. Score: A score out of 100
+            """
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+def jobRole_prompt(cv_content, job_description):
+    prompt = f"""
+                You are an expert CV evaluation assistant.
+                Your task is to rigorously evaluate the provided CV content {cv_content} for the provided job role description {job_description}.
+                Evaluate the alignment of the CV with the specific job role description.
+                Compare the candidate's skills, education, and experience with the requirements of the role.
+                Focus on how well the listed qualifications match the job description, including relevant keywords, skills, and achievements.
+                Identify gaps in relevance or opportunities to better tailor the CV for the job application.
+                Following are some examples of matching the CV content with the job role description:
+                1. Meticulously compare Matching Skills, skills, experience and education listed in the CV with those required in the job description: {job_description}.
+                2. Identify any gaps or matches in skills and experiences, focusing on alignment with job requirements.
+                3. Deduct points for significant mismatches or omissions.
+
+                Apply a strict grading standard, similar to tough marking in an exam.
+                Extract the skills from {cv_content} and required skills from the {job_description} and provide a numbered list of skills that are matching between {cv_content} and {job_description}
+
+                The result should be following format:
+                1. Overall Job Role Compatibility: Numbered list with detailed analysis
+                2. Section-by-section analysis: Numbered list with detailed analysis
+                3. Suggestions for Improvement: Numbered list with detailed suggestions
+                4. Score: A score out of 100
+
+            """
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
+
+def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest4, suggest5):
+    prompt = f"""
+                Draft a New CV based on following:
+                1. Old CV: {cv_content}
+                2. Job Role Description: {job_description}
+                3. Old CV Structuring and Formatting Suggestions: {suggest1}
+                4. Old CV Action Verb Usage Suggestions: {suggest2}
+                5. Old CV Content Quality Suggestions: {suggest3}
+                6. Old CV ATS Compatibility Suggestions: {suggest4}
+                7. Old CV Jobe Role Description: {suggest5}
+                """
+
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+    
+
+def overall_score(suggest1, suggest2, suggest3, suggest4, suggest5):
+    prompt = f"""
+                Extract final scores (provided under Score heading) from the following suggestions:
+                1. CV Structure and Formatting Score: Extract from {suggest1}
+                2. Action Verb Usage in CV Score: Extract from {suggest2}
+                3. CV Content Quality Score: Extract from {suggest3}
+                4. CV ATS Compatibility Score: Extract from {suggest4}
+                5. CV Job Role Description Match Score: Extract from {suggest5}
+    
+                Calculate average score based on above extractions with following weightages:
+                1. CV Structure and Formatting Score Weightage: 10%
+                2. Action Verb Usage in CV Score Weightage: 10%
+                3. CV Content Quality Score Weightage: 10%
+                4. CV ATS Compatibility Score Weightage: 10%
+                5. CV Job Role Description Match Score Weightage: 60%
+
+                The formula for calculating the final score is:
+                Final Score = 
+                0.1 * (Structure and Formatting Score) + 0.1 * (Action Verb Usage Score) + 0.1 * (Content Quality Score) + 0.1 * (ATS Compatibility Score) + 0.6 * (Job Role Description Match Score)
+
+                The result should only be final score in numerical format without any explaination.
+        """
+
+    try:
+        response = co.chat(
+            model="command-r-plus",
+            message= prompt,
+            max_tokens= 2,
+            temperature=0
+        )
+        return response.text
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
