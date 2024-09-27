@@ -29,7 +29,7 @@ def CVstruct_prompt(cv_content):
                 1. Overall Structure an Formatting: Numbered list with detailed analysis
                 2. Section-by-section analysis: Numbered list with detailed analysis
                 3. Suggestions for Improvement: Numbered list with detailed suggestions
-                4. Score: A score out of 100
+                4. Score: A score out of 100 (e.g. Score: 95/100)
                 """
     
     try:
@@ -62,7 +62,7 @@ def actVerb_prompt(cv_content, job_description):
                 1. Overall Action Verb Usage: Numbered list with detailed analysis
                 2. Section-by-section analysis: Numbered list with detailed analysis
                 3. Suggestions for Improvement: Numbered list with detailed suggestions
-                4. Score: A score out of 100
+                4. Score: A score out of 100 (e.g. Score: 95/100)
                 """
     try:
         response = co.chat(
@@ -95,7 +95,7 @@ def CVcontent_prompt(cv_content, job_description):
                 1. Overall CV Content Quality Analysis: Numbered list with detailed analysis
                 2. Section-by-section analysis: Numbered list with detailed analysis
                 3. Suggestions for Improvement: Numbered list with detailed suggestions
-                4. Score: A score out of 100
+                4. Score: A score out of 100 (e.g. Score: 95/100)
             """
     try:
         response = co.chat(
@@ -127,7 +127,7 @@ def ATS_prompt(cv_content, job_description):
                 1. Overall ATS Compatibility Analysis: Numbered list with detailed analysis
                 2. Section-by-section analysis: Numbered list with detailed analysis
                 3. Suggestions for Improvement: Numbered list with detailed suggestions
-                4. Score: A score out of 100
+                4. Score: A score out of 100 (e.g. Score: 95/100)
             """
     try:
         response = co.chat(
@@ -159,7 +159,8 @@ def jobRole_prompt(cv_content, job_description):
                 1. Overall Job Role Compatibility: Numbered list with detailed analysis
                 2. Section-by-section analysis: Numbered list with detailed analysis
                 3. Suggestions for Improvement: Numbered list with detailed suggestions
-                4. Score: A score out of 100
+                4. Matching Skills: A numbered list of skills that are matching between {cv_content} and {job_description}
+                4. Score: A score out of 100 (e.g. Score: 95/100)
 
             """
     try:
