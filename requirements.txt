@@ -3,5 +3,3 @@ cohere
 python-dotenv
 PyPDF2
 Pillow
-transformers
-torch
