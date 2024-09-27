@@ -44,7 +44,10 @@ if st.button("Evaluate"):
                     result_ats = ATS_prompt(cv_content, job_description)
                     result_role = jobRole_prompt(cv_content, job_description)
                     new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
-                    
+
+                tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure and Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
+
+                
                 def extract_score(result_text):
                     match = re.findall(r"(\d+)/100", result_text)
                     if match:
@@ -57,38 +60,39 @@ if st.button("Evaluate"):
                 content_score = extract_score(result_content)
                 ats_score = extract_score(result_ats)
                 role_score = extract_score(result_role)
-                # Data for the chart
-                labels = ['Structure & Formatting', 'Action Verbs', 'Content Quality', 'ATS Compatibility', 'Job Role Match']
-                scores = [struct_score, verb_score, content_score, ats_score, role_score]
-                weightage = [0.1, 0.1, 0.1, 0.1, 0.6]
-                data = pd.DataFrame({'Labels': labels, 'Scores': scores, 'Weightage': weightage})
-                st.bar_chart(data, x = 'Labels', y = 'Scores')
-                # st.text(labels) # Display labels below the chart
-                st.title('CV Evaluation Scores')
-                st.subheader("Overal Score")
-                score = round((data['Scores'] * data['Weightage']).sum(),2)
-                st.write(score)
+                
+                with tab1:
+                    # Data for the chart
+                    labels = ['Structure & Formatting', 'Action Verbs', 'Content Quality', 'ATS Compatibility', 'Job Role Match']
+                    scores = [struct_score, verb_score, content_score, ats_score, role_score]
+                    weightage = [0.1, 0.1, 0.1, 0.1, 0.6]
+                    data = pd.DataFrame({'Labels': labels, 'Scores': scores, 'Weightage': weightage})
+                    st.bar_chart(data, x = 'Labels', y = 'Scores')
+                    # st.text(labels) # Display labels below the chart
+                    st.title('CV Evaluation Scores')
+                    st.subheader("Overal Score")
+                    score = round((data['Scores'] * data['Weightage']).sum(),2)
+                    st.write(score)
 
                 
-                
-                st.subheader("Evaluation Result:")
-                st.subheader("1. Structure and Formatting")
-                st.write(result_struct)
-                st.subheader("2. Action Verbs Usage")
-                st.write(result_verb)
-                st.subheader("3. Content Quality")
-                st.write(result_content)
-                st.subheader("4. ATS Compatibility")
-                st.write(result_ats)
-                st.subheader("5. Job Role Match")
-                st.write(result_role)
-                
-
-                
-
-                
-                st.subheader("6. New Draft CV Based on Above Suggestions:")
-                st.write(new_cv)
+                with tab2:
+                    st.subheader("1. Structure and Formatting")
+                    st.write(result_struct)
+                with tab3:
+                    st.subheader("2. Action Verbs Usage")
+                    st.write(result_verb)
+                with tab4:
+                    st.subheader("3. Content Quality")
+                    st.write(result_content)
+                with tab5:
+                    st.subheader("4. ATS Compatibility")
+                    st.write(result_ats)
+                with tab6:
+                    st.subheader("5. Job Role Match")
+                    st.write(result_role)
+                with tab7:
+                    st.subheader("6. New Draft CV Based on Above Suggestions:")
+                    st.write(new_cv)
 
 
 
