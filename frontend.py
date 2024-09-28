@@ -82,7 +82,7 @@ if st.button("Evaluate"):
                               return "red"
                     color = get_score_color(score)
                     st.markdown(f"<span style='color:{color}'>{score}</span>", unsafe_allow_html=True)
-                    if score >= 75:
+                    if score >= 85:
                         st.write("🟢")
                     elif score >= 60:
                         st.write("🟠")
