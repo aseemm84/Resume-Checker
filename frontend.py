@@ -74,7 +74,7 @@ if st.button("Evaluate"):
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
                     
                     def get_score_color(score):
-                          if score >= 75:
+                          if score >= 85:
                               return "green"
                           elif score >= 60:
                               return "orange"
