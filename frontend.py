@@ -14,7 +14,7 @@ st.set_page_config(
     layout="wide",  # Optional: Use the full width of the browser
     initial_sidebar_state="expanded",  # Optional: Show the sidebar by default
     # Add Open Graph meta tags
-    og_title="CV Insight Pro",  # Title for social media preview
+    # og_title="CV Insight Pro",  # Title for social media preview
     og_description="Your expert AI-powered assistant for crafting a standout and ATS-friendly resume!",  # Description for social media preview
     og_image="static/logo.png"  # Image to display in social media preview
 )
