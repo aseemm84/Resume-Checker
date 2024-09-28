@@ -72,7 +72,16 @@ if st.button("Evaluate"):
                     st.title('CV Evaluation Scores')
                     st.subheader("Overal Score")
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
-                    st.write(score)
+                    
+                    def get_score_color(score):
+                          if score >= 75:
+                              return "green"
+                          elif score >= 60:
+                              return "orange"
+                          else:
+                              return "red"
+                    color = get_score_color(score)
+                    st.markdown(f"<span style='color:{color}'>{score}</span>", unsafe_allow_html=True)
                     if score >= 75:
                         st.write("🟢")
                     elif score >= 60:
