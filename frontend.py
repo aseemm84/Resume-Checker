@@ -73,6 +73,14 @@ if st.button("Evaluate"):
                     st.subheader("Overal Score")
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
                     st.write(score)
+                    if score >= 75:
+                        st.write("🟢")
+                    elif score >= 60:
+                        st.write("🟠")
+                    elif score < 60:
+                        st.write("🔴")
+                    else:
+                        st.write("❌")
 
                 
                 with tab2:
