@@ -141,3 +141,5 @@ Key Features:
 
 Unlock your career potential with a resume that truly reflects your skills and experiences!
 """)
+linkedin_url = "https://www.linkedin.com/in/aseem-mehrotra/"
+st.sidebar.markdown(f'<a href="{linkedin_url}" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" style="height: 30px;"></a>', unsafe_allow_html=True)
