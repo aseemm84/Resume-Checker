@@ -7,7 +7,17 @@ import re
 import pandas as pd
 
 # Set page config as the first Streamlit command
-st.set_page_config(page_title="CV Evaluator", page_icon="📄")
+# st.set_page_config(page_title="CV Evaluator", page_icon="📄")
+st.set_page_config(
+    page_title="CV Insight Pro",  # Title of your app
+    page_icon="📄",  #  Icon for your app
+    layout="wide",  # Optional: Use the full width of the browser
+    initial_sidebar_state="expanded",  # Optional: Show the sidebar by default
+    # Add Open Graph meta tags
+    og_title="CV Insight Pro",  # Title for social media preview
+    og_description="Your expert AI-powered assistant for crafting a standout and ATS-friendly resume!",  # Description for social media preview
+    og_image="static/logo.png"  # Image to display in social media preview
+)
 
 
 col1, col2 = st.columns([1, 4])
