@@ -45,7 +45,7 @@ if st.button("Evaluate"):
                     result_role = jobRole_prompt(cv_content, job_description)
                     new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
 
-                tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure and Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
+                tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure & Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
 
                 
                 def extract_score(result_text):
