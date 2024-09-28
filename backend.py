@@ -1,10 +1,12 @@
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import cohere
+import streamlit as st
 
-load_dotenv()
+# load_dotenv()
 
-co = cohere.Client(os.getenv("COHERE_API_KEY"))
+# co = cohere.Client(os.getenv("COHERE_API_KEY"))
+co = cohere.Client(st.secrets["COHERE_API_KEY"]) 
 
 
 def CVstruct_prompt(cv_content):
