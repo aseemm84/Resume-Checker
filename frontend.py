@@ -15,6 +15,13 @@ st.set_page_config(
     initial_sidebar_state="expanded",  # Optional: Show the sidebar by default
 )
 
+st.markdown(
+    """
+    <meta property="og:title" content="CV Insight Pro" />
+    <meta property="og:description" content="Your expert AI-powered assistant for crafting a standout and ATS-friendly resume!" />
+    """,
+    unsafe_allow_html=True,
+)
 
 col1, col2 = st.columns([1, 4])
 
