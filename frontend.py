@@ -49,7 +49,7 @@ if st.button("Evaluate"):
                 with st.spinner("Evaluating your CV..."):
                     progress_bar = st.progress(0)
                     for i in range(100):
-                        time.sleep(2.5)  # Simulate processing time
+                        time.sleep(0.1)  # Simulate processing time
                         progress_bar.progress(i + 1)
                     result_struct = CVstruct_prompt(cv_content)
                     result_verb = actVerb_prompt(cv_content, job_description)
