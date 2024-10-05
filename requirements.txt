@@ -3,3 +3,4 @@ cohere
 python-dotenv
 PyPDF2
 Pillow
+langchain-groq
