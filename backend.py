@@ -1,12 +1,22 @@
 import os
-# from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import cohere
 import streamlit as st
 
-# load_dotenv()
+#load_dotenv()
 
 # co = cohere.Client(os.getenv("COHERE_API_KEY"))
-co = cohere.Client(st.secrets["COHERE_API_KEY"]) 
+# co = cohere.Client(st.secrets["COHERE_API_KEY"]) 
+groq = st.secrets["Groq_API_Key"]
+
+from langchain_groq import ChatGroq
+
+llm = ChatGroq(
+    model="llama-3.1-70b-versatile",
+    groq_api_key = groq,
+    temperature=0
+    # other params...
+)
 
 
 def CVstruct_prompt(cv_content):
@@ -35,12 +45,8 @@ def CVstruct_prompt(cv_content):
                 """
     
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
     
@@ -67,12 +73,8 @@ def actVerb_prompt(cv_content, job_description):
                 4. Score: A score out of 100 (e.g. Score: 65/100)
                 """
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -100,12 +102,8 @@ def CVcontent_prompt(cv_content, job_description):
                 4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -132,12 +130,8 @@ def ATS_prompt(cv_content, job_description):
                 4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -166,12 +160,8 @@ def jobRole_prompt(cv_content, job_description):
 
             """
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
     
@@ -189,12 +179,8 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
                 """
 
     try:
-        response = co.chat(
-            model="command-r-plus",
-            message= prompt,
-            temperature=0
-        )
-        return response.text
+        response = llm.invoke(prompt)
+        return response.content
     except Exception as e:
         return f"Error: {str(e)}"
     
