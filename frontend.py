@@ -57,7 +57,6 @@ if st.button("Evaluate"):
                                     st.error("Rate limit exceeded. Please try again later.") 
                             else:
                                 st.error(f"An error occurred: {e}")
-                                break  # Exit the loop if an error occurs
 
                 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure & Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
 
