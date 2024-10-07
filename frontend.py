@@ -1,6 +1,6 @@
 import streamlit as st
 import PyPDF2
-from backend import CVstruct_prompt, actVerb_prompt, CVcontent_prompt, ATS_prompt, jobRole_prompt, draft_new
+from backend import CVstruct_prompt, actVerb_prompt, CVcontent_prompt, ATS_prompt, jobRole_prompt, draft_new, summary
 from PIL import Image
 import time
 import re
@@ -45,6 +45,7 @@ if st.button("Evaluate"):
                         result_ats = ATS_prompt(cv_content, job_description)
                         result_role = jobRole_prompt(cv_content, job_description)
                         new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
+                        summarize = summary(result_struct, result_verb, result_content, result_ats, result_role)
 
                     except Exception as e:
                     
@@ -55,6 +56,7 @@ if st.button("Evaluate"):
                         result_ats = "Error processing ATS compatibility"
                         result_role = "Error processing job role match"
                         new_cv = "Error generating new CV" 
+                        summarize = "Error generating summary"
 
                 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure & Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
 
@@ -83,6 +85,7 @@ if st.button("Evaluate"):
                     st.title('CV Evaluation Scores')
                     st.subheader("Overal Score")
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
+                    st.write(summarize)
                     
                     def get_score_color(score):
                           if score >= 75:
