@@ -55,12 +55,12 @@ def CVstruct_prompt(cv_content):
         response = chain.invoke({"cv_content": cv_content})
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
 
@@ -92,12 +92,12 @@ def actVerb_prompt(cv_content, job_description):
         response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
 
@@ -130,12 +130,12 @@ def CVcontent_prompt(cv_content, job_description):
         response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
 
@@ -167,12 +167,12 @@ def ATS_prompt(cv_content, job_description):
         response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
 
@@ -206,12 +206,12 @@ def jobRole_prompt(cv_content, job_description):
         response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
     
@@ -242,11 +242,11 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
         })
         # Check for rate limit error in the response content
         if check_for_rate_limit_error(response.content):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return response.content
     except Exception as e:
         if check_for_rate_limit_error(str(e)):
-            return st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")  # or some other indicator of failure
+            return st.error("This app uses free Groq API. API call Rate limit exceeded.")  # or some other indicator of failure
         else: 
             return st.error(f"An error occurred: {e}")
