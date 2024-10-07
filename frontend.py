@@ -38,12 +38,26 @@ if st.button("Evaluate"):
                     for i in range(100):
                         time.sleep(0.2)  # Simulate processing time
                         progress_bar.progress(i + 1)
-                    result_struct = CVstruct_prompt(cv_content)
-                    result_verb = actVerb_prompt(cv_content, job_description)
-                    result_content = CVcontent_prompt(cv_content, job_description)
-                    result_ats = ATS_prompt(cv_content, job_description)
-                    result_role = jobRole_prompt(cv_content, job_description)
-                    new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
+                    try:
+                            result_struct = CVstruct_prompt(cv_content)
+                            result_verb = actVerb_prompt(cv_content, job_description)
+                            result_content = CVcontent_prompt(cv_content, job_description)
+                            result_ats = ATS_prompt(cv_content, job_description)
+                            result_role = jobRole_prompt(cv_content, job_description)
+                            new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
+
+                    except Exception as e:
+                            if "rate_limit_exceeded" in str(e): 
+                                # Extract the wait time from the error message
+                                match = re.search(r"Please try again in (\d+m\d+\.\d+s)", str(e))
+                                if match:
+                                    wait_time = match.group(1)
+                                    st.error(f"Rate limit exceeded. Please try again in {wait_time}.")
+                                else:
+                                    st.error("Rate limit exceeded. Please try again later.") 
+                            else:
+                                st.error(f"An error occurred: {e}")
+                            break  # Exit the loop if an error occurs
 
                 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure & Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
 
