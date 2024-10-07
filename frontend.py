@@ -52,9 +52,9 @@ if st.button("Evaluate"):
                                 match = re.search(r"Please try again in (\d+m\d+\.\d+s)", str(e))
                                 if match:
                                     wait_time = match.group(1)
-                                    st.error(f"Rate limit exceeded. Please try again in {wait_time}.")
+                                    st.error(f"The app runs on free Groq API. Free usage Rate limit exceeded. Please try again in {wait_time}.")
                                 else:
-                                    st.error("Rate limit exceeded. Please try again later.") 
+                                    st.error("The app runs on free Groq API. Free usage Rate limit exceeded. Please try again later.") 
                             else:
                                 st.error(f"An error occurred: {e}")
 
