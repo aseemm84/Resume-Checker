@@ -2,7 +2,7 @@ import streamlit as st
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
-
+import re
 
 groq = st.secrets["Groq_API_Key"]
 
@@ -14,6 +14,16 @@ llm = ChatGroq(
     temperature=0
     # other params...
 )
+
+def check_for_rate_limit_error(response_content):
+    """Checks if the response content contains a Groq rate limit error."""
+    error_pattern = r"Rate limit reached.*in (\d+m\d+\.\d+s)"
+    match = re.search(error_pattern, response_content)
+    if match:
+        wait_time = match.group(1)
+        st.error(f"This app uses free Groq API. API call Rate limit exceeded. Please try again in {wait_time}.")
+        return True
+    return False
 
 def CVstruct_prompt(cv_content):
     template = """
@@ -43,9 +53,13 @@ def CVstruct_prompt(cv_content):
     chain = prompt | llm
     try:
         response = chain.invoke({"cv_content": cv_content})
+        # Check for rate limit error in the response content
+        if check_for_rate_limit_error(response.content):
+            return None  # or some other indicator of failure
         return response.content
     except Exception as e:
-        return f"Error: {str(e)}"
+        st.error(f"An error occurred: {e}")
+        return None
 
 def actVerb_prompt(cv_content, job_description):
     template = """
