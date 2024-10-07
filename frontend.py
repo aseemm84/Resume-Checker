@@ -39,24 +39,22 @@ if st.button("Evaluate"):
                         time.sleep(0.2)  # Simulate processing time
                         progress_bar.progress(i + 1)
                     try:
-                            result_struct = CVstruct_prompt(cv_content)
-                            result_verb = actVerb_prompt(cv_content, job_description)
-                            result_content = CVcontent_prompt(cv_content, job_description)
-                            result_ats = ATS_prompt(cv_content, job_description)
-                            result_role = jobRole_prompt(cv_content, job_description)
-                            new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
+                        result_struct = CVstruct_prompt(cv_content)
+                        result_verb = actVerb_prompt(cv_content, job_description)
+                        result_content = CVcontent_prompt(cv_content, job_description)
+                        result_ats = ATS_prompt(cv_content, job_description)
+                        result_role = jobRole_prompt(cv_content, job_description)
+                        new_cv = draft_new(cv_content, job_description, result_struct, result_verb, result_content, result_ats, result_role)
 
                     except Exception as e:
-                            if "rate_limit_exceeded" in str(e): 
-                                # Extract the wait time from the error message
-                                match = re.search(r"Please try again in (\d+m\d+\.\d+s)", str(e))
-                                if match:
-                                    wait_time = match.group(1)
-                                    st.error(f"The app runs on free Groq API. Free usage Rate limit exceeded. Please try again in {wait_time}.")
-                                else:
-                                    st.error("The app runs on free Groq API. Free usage Rate limit exceeded. Please try again later.") 
-                            else:
-                                st.error(f"An error occurred: {e}")
+                    
+                        # Assign default values in case of an error
+                        result_struct = "Error processing structure"  
+                        result_verb = "Error processing verbs"
+                        result_content = "Error processing content"
+                        result_ats = "Error processing ATS compatibility"
+                        result_role = "Error processing job role match"
+                        new_cv = "Error generating new CV" 
 
                 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["Summary", "Structure & Formatting", "Action Verbs Usage", "Content Quality", "ATS Compatibility", "Job Role Match", "New Draft CV"])
 
