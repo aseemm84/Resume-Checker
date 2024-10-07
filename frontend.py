@@ -7,21 +7,8 @@ import re
 import pandas as pd
 
 # Set page config as the first Streamlit command
-# st.set_page_config(page_title="CV Evaluator", page_icon="📄")
-st.set_page_config(
-    page_title="CV Insight Pro",  # Title of your app
-    page_icon="📄",  #  Icon for your app
-    layout="wide",  # Optional: Use the full width of the browser
-    initial_sidebar_state="expanded",  # Optional: Show the sidebar by default
-)
+st.set_page_config(page_title="CV Evaluator", page_icon="📄")
 
-st.markdown(
-    """
-    <meta property="og:title" content="CV Insight Pro" />
-    <meta property="og:description" content="Your expert AI-powered assistant for crafting a standout and ATS-friendly resume!" />
-    """,
-    unsafe_allow_html=True,
-)
 
 col1, col2 = st.columns([1, 4])
 
@@ -49,7 +36,7 @@ if st.button("Evaluate"):
                 with st.spinner("Evaluating your CV..."):
                     progress_bar = st.progress(0)
                     for i in range(100):
-                        time.sleep(0.1)  # Simulate processing time
+                        time.sleep(2.5)  # Simulate processing time
                         progress_bar.progress(i + 1)
                     result_struct = CVstruct_prompt(cv_content)
                     result_verb = actVerb_prompt(cv_content, job_description)
@@ -87,7 +74,7 @@ if st.button("Evaluate"):
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
                     
                     def get_score_color(score):
-                          if score >= 85:
+                          if score >= 75:
                               return "green"
                           elif score >= 60:
                               return "orange"
