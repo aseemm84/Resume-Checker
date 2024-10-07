@@ -73,7 +73,7 @@ def actVerb_prompt(cv_content, job_description):
             """
     prompt = ChatPromptTemplate.from_template(template)
     chain = prompt | model
-   try:
+    try:
         response = chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
         return response.text
     except Exception as e:
