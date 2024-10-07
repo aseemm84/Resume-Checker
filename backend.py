@@ -8,7 +8,7 @@ import google.generativeai as genai
 groq = st.secrets["Groq_API_Key"]
 gemini = st.secrets["Gemini_API_Key"]
 genai.configure(api_key= gemini)
-model = genai.GenerativeModel("gemini-1.5-flash")
+model = GoogleGenerativeAI(model_name="gemini-1.5-flash", temperature=0, max_output_tokens=4000)
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
@@ -45,7 +45,7 @@ def CVstruct_prompt(cv_content):
     llm_chain = LLMChain(llm=model, prompt=prompt) 
 
     try:
-        response = llm_chain.invoke({"cv_content": cv_content}, temperature=0, max_tokens=4000)
+        response = llm_chain.invoke({"cv_content": cv_content})
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -75,7 +75,7 @@ def actVerb_prompt(cv_content, job_description):
     prompt = ChatPromptTemplate.from_template(template)
     llm_chain = LLMChain(llm=model, prompt=prompt)  
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -106,7 +106,7 @@ def CVcontent_prompt(cv_content, job_description):
     prompt = ChatPromptTemplate.from_template(template)
     llm_chain = LLMChain(llm=model, prompt=prompt)  
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -136,7 +136,7 @@ def ATS_prompt(cv_content, job_description):
     prompt = ChatPromptTemplate.from_template(template)
     llm_chain = LLMChain(llm=model, prompt=prompt)
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -168,7 +168,7 @@ def jobRole_prompt(cv_content, job_description):
     prompt = ChatPromptTemplate.from_template(template)
     llm_chain = LLMChain(llm=model, prompt=prompt)  
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
@@ -197,7 +197,7 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
                "suggest3": suggest3, 
                "suggest4": suggest4, 
                "suggest5": suggest5
-            }, temperature=0, max_tokens=4000)
+            })
         return response.text
     except Exception as e:
         return f"Error: {str(e)}"
