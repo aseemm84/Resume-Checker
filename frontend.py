@@ -81,11 +81,11 @@ if st.button("Evaluate"):
                     weightage = [0.1, 0.1, 0.1, 0.1, 0.6]
                     data = pd.DataFrame({'Labels': labels, 'Scores': scores, 'Weightage': weightage})
                     st.bar_chart(data, x = 'Labels', y = 'Scores')
-                    # st.text(labels) # Display labels below the chart
+                    st.write(summarize)
                     st.title('CV Evaluation Scores')
                     st.subheader("Overal Score")
                     score = round((data['Scores'] * data['Weightage']).sum(),2)
-                    st.write(summarize)
+                    
                     
                     def get_score_color(score):
                           if score >= 75:
