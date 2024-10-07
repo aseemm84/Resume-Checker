@@ -262,3 +262,32 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
             return error_message # Return the error string
         else: 
             return f"An error occurred: {e}"
+
+
+def summary(suggest1, suggest2, suggest3, suggest4, suggest5):
+    template = """
+            Provide a short summary of the content in 200 words.
+            """
+
+    prompt = ChatPromptTemplate.from_template(template)
+    chain = prompt | llm
+    try:
+        response = chain.invoke({ 
+            "suggest1": suggest1, 
+            "suggest2": suggest2, 
+            "suggest3": suggest3, 
+            "suggest4": suggest4, 
+            "suggest5": suggest5
+        })
+        # Check for rate limit error in the response content
+        error_message = check_for_rate_limit_error(response.content) 
+        if error_message:
+            return error_message # Return the error string
+        else: 
+            return response.content
+    except Exception as e:
+        error_message = check_for_rate_limit_error(str(e))
+        if error_message:
+            return error_message # Return the error string
+        else: 
+            return f"An error occurred: {e}"
