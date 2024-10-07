@@ -266,7 +266,12 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
 
 def summary(suggest1, suggest2, suggest3, suggest4, suggest5):
     template = """
-            Provide a short summary of the content in 200 words.
+            Provide a short summary of the following content in 200 word:
+            1. Old CV Structuring and Formatting Suggestions: {suggest1}
+            2. Old CV Action Verb Usage Suggestions: {suggest2}
+            3. Old CV Content Quality Suggestions: {suggest3}
+            4. Old CV ATS Compatibility Suggestions: {suggest4}
+            5. Old CV Job Role Description: {suggest5}
             """
 
     prompt = ChatPromptTemplate.from_template(template)
