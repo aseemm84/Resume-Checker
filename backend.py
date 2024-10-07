@@ -196,4 +196,4 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
         response = model.generate_content([prompt])
         return response[0].text
     except Exception as e:
-        return f"Error: {str(e)}
+        return f"Error: {str(e)}"
