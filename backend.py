@@ -57,13 +57,13 @@ def CVstruct_prompt(cv_content):
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
 
 def actVerb_prompt(cv_content, job_description):
@@ -96,13 +96,13 @@ def actVerb_prompt(cv_content, job_description):
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
 
 def CVcontent_prompt(cv_content, job_description):
@@ -136,13 +136,13 @@ def CVcontent_prompt(cv_content, job_description):
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
 
 def ATS_prompt(cv_content, job_description):
@@ -175,13 +175,13 @@ def ATS_prompt(cv_content, job_description):
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
 
 def jobRole_prompt(cv_content, job_description):
@@ -216,13 +216,13 @@ def jobRole_prompt(cv_content, job_description):
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
     
 
@@ -254,11 +254,11 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
         error_message = check_for_rate_limit_error(response.content) 
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return response.content
     except Exception as e:
         error_message = check_for_rate_limit_error(str(e))
         if error_message:
             return error_message # Return the error string
-        else: 
+        else: 
             return f"An error occurred: {e}"
