@@ -6,7 +6,7 @@ import google.generativeai as genai
 
 
 groq = st.secrets["Groq_API_Key"]
-gemini = st.secrest["Gemini_API_Key"]
+gemini = st.secrets["Gemini_API_Key"]
 genai.configure(api_key= gemini)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
