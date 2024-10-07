@@ -3,13 +3,13 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
 import google.generativeai as genai
-from langchain.llms import GoogleGenerativeAI
+
 
 
 groq = st.secrets["Groq_API_Key"]
 gemini = st.secrets["Gemini_API_Key"]
 genai.configure(api_key= gemini)
-model = GoogleGenerativeAI(model_name="gemini-1.5-flash", temperature=0, max_output_tokens=4000)
+model = genai(model_name="gemini-1.5-flash", temperature=0, max_output_tokens=4000)
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
@@ -42,12 +42,11 @@ def CVstruct_prompt(cv_content):
             3. Suggestions for Improvement: Numbered list with detailed suggestions
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt) 
+    prompt = ChatPromptTemplate.from_template(template).format(cv_content=cv_content)  # Format the prompt
 
     try:
-        response = llm_chain.invoke({"cv_content": cv_content})
-        return response.text
+        response = model.generate_content([prompt])  # Use generate_content
+        return response[0].text  # Access the text from the response
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -73,11 +72,10 @@ def actVerb_prompt(cv_content, job_description):
             3. Suggestions for Improvement: Numbered list with detailed suggestions
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt)  
+    prompt = ChatPromptTemplate.from_template(template).format(cv_content=cv_content, job_description=job_description)
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.text
+        response = model.generate_content([prompt])
+        return response[0].text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -104,11 +102,10 @@ def CVcontent_prompt(cv_content, job_description):
             3. Suggestions for Improvement: Numbered list with detailed suggestions
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt)  
+    prompt = ChatPromptTemplate.from_template(template).format(cv_content=cv_content, job_description=job_description)
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.text
+        response = model.generate_content([prompt])
+        return response[0].text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -134,13 +131,13 @@ def ATS_prompt(cv_content, job_description):
             3. Suggestions for Improvement: Numbered list with detailed suggestions
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt)
+    prompt = ChatPromptTemplate.from_template(template).format(cv_content=cv_content, job_description=job_description)
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.text
+        response = model.generate_content([prompt])
+        return response[0].text
     except Exception as e:
         return f"Error: {str(e)}"
+
 
 def jobRole_prompt(cv_content, job_description):
     template = """
@@ -166,11 +163,10 @@ def jobRole_prompt(cv_content, job_description):
             4. Score: A score out of 100 (e.g. Score: 65/100)
 
             """
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt)  
+    prompt = ChatPromptTemplate.from_template(template).format(cv_content=cv_content, job_description=job_description)
     try:
-        response = llm_chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.text
+        response = model.generate_content([prompt])
+        return response[0].text
     except Exception as e:
         return f"Error: {str(e)}"
     
@@ -187,18 +183,17 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
             7. Old CV Job Role Description: {suggest5}
             """
 
-    prompt = ChatPromptTemplate.from_template(template)
-    llm_chain = LLMChain(llm=model, prompt=prompt)  
+    prompt = ChatPromptTemplate.from_template(template).format(
+        cv_content=cv_content, 
+        job_description=job_description, 
+        suggest1=suggest1, 
+        suggest2=suggest2, 
+        suggest3=suggest3, 
+        suggest4=suggest4, 
+        suggest5=suggest5
+    )
     try:
-        response = llm_chain.invoke({
-               "cv_content": cv_content, 
-               "job_description": job_description, 
-               "suggest1": suggest1, 
-               "suggest2": suggest2, 
-               "suggest3": suggest3, 
-               "suggest4": suggest4, 
-               "suggest5": suggest5
-            })
-        return response.text
+        response = model.generate_content([prompt])
+        return response[0].text
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error: {str(e)}
