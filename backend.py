@@ -3,12 +3,13 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
 import google.generativeai as genai
+from langchain.llms import GoogleGenerativeAI
 
 
 groq = st.secrets["Groq_API_Key"]
 gemini = st.secrets["Gemini_API_Key"]
 genai.configure(api_key= gemini)
-model = genai(model_name="gemini-1.5-flash", temperature=0, max_output_tokens=4000)
+model = GoogleGenerativeAI(model_name="gemini-1.5-flash", temperature=0, max_output_tokens=4000)
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
