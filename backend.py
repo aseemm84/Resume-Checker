@@ -2,11 +2,13 @@ import streamlit as st
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
+import google.generativeai as genai
 
 
 groq = st.secrets["Groq_API_Key"]
-
-
+gemini = st.secrest["Gemini_API_Key"]
+genai.configure(api_key= gemini)
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 llm = ChatGroq(
     model="llama-3.1-70b-versatile",
@@ -40,10 +42,10 @@ def CVstruct_prompt(cv_content):
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    chain = prompt | model
     try:
-        response = chain.invoke({"cv_content": cv_content})
-        return response.content
+        response = chain.invoke({"cv_content": cv_content}, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -70,10 +72,10 @@ def actVerb_prompt(cv_content, job_description):
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
-    try:
-        response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.content
+    chain = prompt | model
+   try:
+        response = chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -101,10 +103,10 @@ def CVcontent_prompt(cv_content, job_description):
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    chain = prompt | model
     try:
-        response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.content
+        response = chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -131,10 +133,10 @@ def ATS_prompt(cv_content, job_description):
             4. Score: A score out of 100 (e.g. Score: 65/100)
             """
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    chain = prompt | model
     try:
-        response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.content
+        response = chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
 
@@ -163,10 +165,10 @@ def jobRole_prompt(cv_content, job_description):
 
             """
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    chain = prompt | model
     try:
-        response = chain.invoke({"cv_content": cv_content, "job_description": job_description})
-        return response.content
+        response = chain.invoke({"cv_content": cv_content, "job_description": job_description}, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
     
@@ -184,17 +186,17 @@ def draft_new(cv_content, job_description, suggest1, suggest2, suggest3, suggest
             """
 
     prompt = ChatPromptTemplate.from_template(template)
-    chain = prompt | llm
+    chain = prompt | model
     try:
         response = chain.invoke({
-            "cv_content": cv_content, 
-            "job_description": job_description, 
-            "suggest1": suggest1, 
-            "suggest2": suggest2, 
-            "suggest3": suggest3, 
-            "suggest4": suggest4, 
-            "suggest5": suggest5
-        })
-        return response.content
+               "cv_content": cv_content, 
+               "job_description": job_description, 
+               "suggest1": suggest1, 
+               "suggest2": suggest2, 
+               "suggest3": suggest3, 
+               "suggest4": suggest4, 
+               "suggest5": suggest5
+            }, temperature=0, max_tokens=4000)
+        return response.text
     except Exception as e:
         return f"Error: {str(e)}"
