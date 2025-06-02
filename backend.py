@@ -9,7 +9,7 @@ groq = st.secrets["Groq_API_Key"]
 
 
 llm = ChatGroq(
-    model="compound-beta",
+    model="meta-llama/llama-4-scout-17b-16e-instruct",
     groq_api_key=groq,
     temperature=0
     # other params...
