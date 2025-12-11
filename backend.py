@@ -1,7 +1,6 @@
 import streamlit as st
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains import LLMChain
 import re
 
 groq = st.secrets["Groq_API_Key"]
@@ -76,7 +75,7 @@ def actVerb_prompt(cv_content, job_description):
             Suggest improvements if any passive language or repetitive verbs are detected.
             Following are some examples of action verb usage best practices:
             1. Use varied and impactful action verbs to begin each bullet point, showcasing specific actions taken (e.g., developed, managed, coordinated).
-            2. Replace generic phrases like “responsible for” or “duties include” with dynamic action verbs.
+            2. Replace generic phrases like "responsible for" or "duties include" with dynamic action verbs.
             3. Align choice of verbs with the industry or job role {job_description} for which the CV {cv_content} will be used to apply (e.g., "engineered" for technical roles, "negotiated" for management).
             4. Diversify your verb usage to cover different skills such as leadership, communication, problem-solving, and technical expertise.
                
@@ -157,7 +156,7 @@ def ATS_prompt(cv_content, job_description):
             1. Avoid unusual fonts, images, or special characters that could confuse Applicant Tracking Systems (ATS).
             2. Tailor the CV by incorporating keywords and phrases from the job description to ensure it ranks higher in ATS.
             3. Use simple formats, avoiding text boxes, columns, and tables, which might not be readable by ATS.
-            4. Stick to conventional headings like “Work Experience” and “Education” to ensure ATS systems can easily parse your resume.
+            4. Stick to conventional headings like "Work Experience" and "Education" to ensure ATS systems can easily parse your resume.
 
             Apply a strict grading standard, similar to tough marking in an exam.
 
